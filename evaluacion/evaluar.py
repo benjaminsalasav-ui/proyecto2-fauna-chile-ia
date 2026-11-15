@@ -3,6 +3,7 @@
 Uso (desde la raíz del repositorio):
     python -m evaluacion.evaluar            # Prolog + LLM (si está configurado en .env)
     python -m evaluacion.evaluar --solo-prolog
+    python -m evaluacion.evaluar --completar   # conserva las respuestas del LLM ya obtenidas
 
 Genera:
     (Además evalúa evaluacion/preguntas_robustez.json: 10 preguntas extra no usadas para ajustar el sistema.)
@@ -54,31 +55,74 @@ def evaluar_respuesta(texto: str | None, esperado: list, prohibido: list) -> dic
     return {"estado": estado, "cumplidos": cumplidos, "total": len(esperado), "prohibidos": encontrados}
 
 
-def evaluar_conjunto(servicio: ServicioChatbot, archivo: str, usar_llm: bool) -> list:
+def respuesta_valida(r: dict | None) -> bool:
+    return bool(r and r.get("texto") and not r.get("error") and "respuesta cortada" not in r["texto"])
+
+
+class EstadoLLM:
+    """Detiene las consultas al LLM si la cuota se agotó (varios errores 429 seguidos)."""
+
+    def __init__(self) -> None:
+        self.fallos_cuota = 0
+
+    @property
+    def agotado(self) -> bool:
+        return self.fallos_cuota >= 2
+
+
+def evaluar_conjunto(servicio: ServicioChatbot, archivo: str, usar_llm: bool,
+                     previos: dict | None = None, estado: EstadoLLM | None = None) -> list:
     preguntas = json.loads((CARPETA / archivo).read_text(encoding="utf-8"))
+    previos = previos or {}
+    estado = estado or EstadoLLM()
     filas = []
     for p in preguntas:
         fila = {k: p[k] for k in ("id", "categoria", "pregunta", "esperado", "prohibido")}
-        motores = ["prolog"] + (["llm"] if usar_llm else [])
-        for motor in motores:
-            r = servicio.preguntar(p["pregunta"], motor)["respuestas"][motor]
+        for motor in ["prolog"] + (["llm"] if usar_llm else []):
+            anterior = previos.get(str(p["id"]), {}).get(motor)
+            if motor == "llm" and respuesta_valida(anterior):
+                r = anterior  # ya respondida en una ejecución anterior: se conserva
+                origen = "(guardada)"
+            elif motor == "llm" and estado.agotado:
+                r = anterior or {"motor": "llm", "texto": None, "ms": 0,
+                                 "error": "Cuota del LLM agotada; ejecutar de nuevo con --completar"}
+                origen = "(omitida)"
+            else:
+                r = servicio.preguntar(p["pregunta"], motor)["respuestas"][motor]
+                origen = ""
+                if motor == "llm":
+                    r["modelo"] = servicio.llm.modelo
+                    estado.fallos_cuota = estado.fallos_cuota + 1 if "429" in (r.get("error") or "") else 0
+                    time.sleep(4)  # evita superar el límite de solicitudes por minuto del plan gratuito
             r["evaluacion"] = evaluar_respuesta(r["texto"], p["esperado"], p["prohibido"])
             fila[motor] = r
-            print(f"[{p['id']:>2}] {motor:<6} {r['evaluacion']['estado']:<13} {r['ms']:>5} ms  {p['pregunta']}")
+            print(f"[{p['id']:>3}] {motor:<6} {r['evaluacion']['estado']:<13} {r['ms']:>6} ms {origen} {p['pregunta']}")
         filas.append(fila)
-        if usar_llm:
-            time.sleep(4)  # evita superar el límite de solicitudes por minuto del plan gratuito
     return filas
 
 
-def ejecutar(solo_prolog: bool = False) -> dict:
+def cargar_previos() -> dict:
+    ruta = CARPETA / "resultados.json"
+    if not ruta.exists():
+        return {}
+    datos = json.loads(ruta.read_text(encoding="utf-8"))
+    return {str(f["id"]): f for f in datos.get("preguntas", []) + datos.get("robustez", [])}
+
+
+def ejecutar(solo_prolog: bool = False, completar: bool = False) -> dict:
     servicio = ServicioChatbot()
     usar_llm = servicio.llm.configurado and not solo_prolog
     motores = ["prolog", "llm"] if usar_llm else ["prolog"]
+    previos = cargar_previos() if completar else {}
+    estado = EstadoLLM()
     print("== Set principal (20 preguntas) ==")
-    filas = evaluar_conjunto(servicio, "preguntas.json", usar_llm)
+    filas = evaluar_conjunto(servicio, "preguntas.json", usar_llm, previos, estado)
     print("== Set complementario de robustez (10 preguntas no usadas para ajustar el sistema) ==")
-    robustez = evaluar_conjunto(servicio, "preguntas_robustez.json", usar_llm)
+    robustez = evaluar_conjunto(servicio, "preguntas_robustez.json", usar_llm, previos, estado)
+    modelos = sorted({f["llm"].get("modelo") for f in filas + robustez
+                      if "llm" in f and f["llm"].get("modelo") and f["llm"].get("texto")})
+    if modelos:
+        servicio.llm.modelo = ", ".join(modelos)
     return {
         "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
         "llm": {"usado": usar_llm, "proveedor": servicio.llm.config.proveedor, "modelo": servicio.llm.modelo},
@@ -134,9 +178,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--solo-prolog", action="store_true", help="no consultar el LLM")
     parser.add_argument("--sin-informe", action="store_true", help="no regenerar el informe Word")
+    parser.add_argument("--completar", action="store_true",
+                        help="conservar las respuestas del LLM ya obtenidas y preguntar solo las que faltan")
     args = parser.parse_args()
     try:
-        resultado = ejecutar(args.solo_prolog)
+        resultado = ejecutar(args.solo_prolog, args.completar)
     except ErrorMotor as exc:
         raise SystemExit(f"Error: {exc}")
     if not resultado["llm"]["usado"] and not args.solo_prolog:
@@ -145,6 +191,11 @@ def main() -> None:
     (CARPETA / "resultados.md").write_text(escribir_markdown(resultado), encoding="utf-8")
     print("\nResumen:", json.dumps(resultado["resumen"], ensure_ascii=False))
     print("Robustez:", json.dumps(resultado["resumen_robustez"], ensure_ascii=False))
+    faltan = [str(f["id"]) for f in resultado["preguntas"] + resultado["robustez"]
+              if "llm" in f and not respuesta_valida(f["llm"])]
+    if faltan:
+        print(f"\nAVISO: faltan {len(faltan)} respuestas del LLM ({', '.join(faltan)}). "
+              "Cuando haya cuota, ejecuta: python -m evaluacion.evaluar --completar")
     if not args.sin_informe:
         from informe.generar_informe import generar
         ruta = generar(resultado)

@@ -31,7 +31,7 @@ BASE DE CONOCIMIENTO:
 {conocimiento}"""
 
 MAX_TURNOS_HISTORIAL = 6
-REINTENTOS_CUOTA = 4      # reintentos si el proveedor responde 429 (límite por minuto)
+REINTENTOS_CUOTA = 2      # reintentos si el proveedor responde 429 (límite por minuto)
 ESPERA_CUOTA_S = 20
 _EXCLUIR = ("lite", "tts", "live", "audio", "image", "embedding", "vision", "robotics",
             "transcribe", "omni", "translate", "aqa", "learnlm", "gemma", "thinking")
