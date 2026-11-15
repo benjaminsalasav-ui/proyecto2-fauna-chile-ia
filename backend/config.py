@@ -19,7 +19,7 @@ if load_dotenv:
 
 # Proveedores compatibles con la API de OpenAI: (base_url, modelo por defecto)
 PROVEEDORES = {
-    "gemini": ("https://generativelanguage.googleapis.com/v1beta/openai/", "gemini-2.5-flash"),
+    "gemini": ("https://generativelanguage.googleapis.com/v1beta/openai/", "gemini-3.5-flash"),
     "groq": ("https://api.groq.com/openai/v1", "llama-3.3-70b-versatile"),
     "openai": (None, "gpt-4o-mini"),
     "ollama": ("http://localhost:11434/v1", "llama3.1"),

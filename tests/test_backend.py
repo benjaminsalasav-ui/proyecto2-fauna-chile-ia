@@ -83,3 +83,25 @@ def test_api_ambos_motores():
     assert cliente.post("/api/preguntar", json={"pregunta": ""}).status_code == 400
     assert cliente.post("/api/preguntar", json={"pregunta": "hola", "motor": "x"}).status_code == 400
     assert cliente.get("/api/estado").get_json()["especies"] == 23
+
+
+class ErrorNoEncontrado(Exception):
+    status_code = 404
+
+
+def test_llm_elige_otro_modelo_si_no_existe():
+    cliente = ClienteFalso("ok")
+    original = cliente.chat.completions.create
+
+    def crear(**kwargs):
+        if kwargs["model"] == "modelo":
+            raise ErrorNoEncontrado("not found")
+        return original(**kwargs)
+
+    cliente.chat.completions.create = crear
+    cliente.models = SimpleNamespace(list=lambda: [SimpleNamespace(id=i) for i in
+                                    ["models/gemini-3.5-flash", "models/gemini-3.6-flash", "models/gemini-3.8-flash-lite",
+                                     "models/gemini-3.8-flash-tts", "models/gemini-3.7-flash-preview"]])
+    motor = MotorLLM(lambda: "", config=SIN_KEY, cliente=cliente)
+    assert motor.responder("hola") == "ok"
+    assert motor.modelo == "gemini-3.6-flash"

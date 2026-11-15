@@ -81,7 +81,7 @@ def ejecutar(solo_prolog: bool = False) -> dict:
     robustez = evaluar_conjunto(servicio, "preguntas_robustez.json", usar_llm)
     return {
         "fecha": datetime.now().strftime("%Y-%m-%d %H:%M"),
-        "llm": {"usado": usar_llm, "proveedor": servicio.llm.config.proveedor, "modelo": servicio.llm.config.modelo},
+        "llm": {"usado": usar_llm, "proveedor": servicio.llm.config.proveedor, "modelo": servicio.llm.modelo},
         "preguntas": filas,
         "resumen": {m: resumir(filas, m) for m in motores},
         "robustez": robustez,

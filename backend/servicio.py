@@ -67,6 +67,6 @@ class ServicioChatbot:
             "prolog": self.prolog.disponible,
             "llm": self.llm.configurado,
             "proveedor_llm": self.llm.config.proveedor,
-            "modelo_llm": self.llm.config.modelo,
+            "modelo_llm": self.llm.modelo,
             "especies": especies,
         }

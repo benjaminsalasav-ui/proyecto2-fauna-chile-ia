@@ -9,6 +9,7 @@ OpenAI u Ollama (local). Se configura en el archivo .env.
 """
 from __future__ import annotations
 
+import re
 from typing import Callable, Iterable
 
 from .config import ConfigLLM, cargar_config_llm
@@ -29,6 +30,12 @@ BASE DE CONOCIMIENTO:
 {conocimiento}"""
 
 MAX_TURNOS_HISTORIAL = 6
+_EXCLUIR = ("lite", "tts", "live", "audio", "image", "embedding", "vision", "robotics",
+            "transcribe", "omni", "translate", "aqa", "learnlm", "gemma", "thinking")
+
+
+def _clave_version(modelo: str) -> tuple:
+    return tuple(int(n) for n in re.findall(r"\d+", modelo)[:3])
 
 
 class MotorLLM:
@@ -43,6 +50,7 @@ class MotorLLM:
         self._conocimiento = proveedor_conocimiento
         self.config = config or cargar_config_llm()
         self._cliente = cliente
+        self.modelo = self.config.modelo  # puede cambiar si el modelo configurado no existe
 
     @property
     def configurado(self) -> bool:
@@ -69,17 +77,38 @@ class MotorLLM:
         mensajes.append({"role": "user", "content": pregunta})
         return mensajes
 
+    def _elegir_modelo_disponible(self, cliente) -> str | None:
+        """Si el modelo configurado no existe, busca el modelo 'flash' estable más reciente de la cuenta."""
+        try:
+            ids = [m.id.split("/")[-1] for m in cliente.models.list()]
+        except Exception:
+            return None
+        candidatos = [i for i in ids if "flash" in i and not any(x in i for x in _EXCLUIR)]
+        estables = [i for i in candidatos if "preview" not in i and "exp" not in i] or candidatos
+        return max(estables, key=_clave_version) if estables else None
+
+    def _crear(self, cliente, mensajes: list[dict]):
+        return cliente.chat.completions.create(
+            model=self.modelo, messages=mensajes,
+            temperature=self.config.temperatura, max_tokens=self.config.max_tokens,
+        )
+
     def responder(self, pregunta: str, historial: Iterable[dict] | None = None) -> str:
         cliente = self._obtener_cliente()
+        mensajes = self.construir_mensajes(pregunta, historial)
         try:
-            respuesta = cliente.chat.completions.create(
-                model=self.config.modelo,
-                messages=self.construir_mensajes(pregunta, historial),
-                temperature=self.config.temperatura,
-                max_tokens=self.config.max_tokens,
-            )
+            try:
+                respuesta = self._crear(cliente, mensajes)
+            except Exception as exc:
+                if getattr(exc, "status_code", None) != 404:
+                    raise
+                nuevo = self._elegir_modelo_disponible(cliente)
+                if not nuevo or nuevo == self.modelo:
+                    raise
+                self.modelo = nuevo
+                respuesta = self._crear(cliente, mensajes)
         except Exception as exc:  # errores de red, cuota, modelo inexistente, etc.
-            raise ErrorMotor(f"Error al consultar el LLM ({self.config.proveedor}): {exc}") from exc
+            raise ErrorMotor(f"Error al consultar el LLM ({self.config.proveedor}, modelo {self.modelo}): {exc}") from exc
         texto = (respuesta.choices[0].message.content or "").strip()
         if not texto:
             raise ErrorMotor("El LLM devolvió una respuesta vacía.")
