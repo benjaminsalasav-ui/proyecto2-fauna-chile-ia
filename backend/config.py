@@ -51,7 +51,7 @@ def cargar_config_llm() -> ConfigLLM:
         modelo=os.getenv("LLM_MODELO") or modelo_defecto,
         api_key=os.getenv("LLM_API_KEY") or None,
         temperatura=float(os.getenv("LLM_TEMPERATURA", "0")),
-        max_tokens=int(os.getenv("LLM_MAX_TOKENS", "600")),
+        max_tokens=int(os.getenv("LLM_MAX_TOKENS", "8192")),
         timeout=float(os.getenv("LLM_TIMEOUT", "60")),
     )
 

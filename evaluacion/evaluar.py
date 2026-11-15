@@ -67,7 +67,7 @@ def evaluar_conjunto(servicio: ServicioChatbot, archivo: str, usar_llm: bool) ->
             print(f"[{p['id']:>2}] {motor:<6} {r['evaluacion']['estado']:<13} {r['ms']:>5} ms  {p['pregunta']}")
         filas.append(fila)
         if usar_llm:
-            time.sleep(1)  # evita superar el límite de solicitudes por minuto del plan gratuito
+            time.sleep(4)  # evita superar el límite de solicitudes por minuto del plan gratuito
     return filas
 
 

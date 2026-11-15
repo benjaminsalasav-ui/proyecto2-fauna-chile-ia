@@ -19,7 +19,7 @@ RAIZ = Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "informe" / "Informe_Proyecto2_Entrega2.docx"
 VERDE = RGBColor(0x2F, 0x6B, 0x4F)
 COLOR_ESTADO = {"correcta": "D9EAD3", "parcial": "FFF2CC", "incorrecta": "F4CCCC", "sin respuesta": "EEEEEE"}
-INTEGRANTES = ["Benjamín Salas", "Integrante 2", "Integrante 3"]
+INTEGRANTES = ["Benjamín Salas", "Luis Romero", "Matías Vicencio"]
 
 # ----------------------------------------------------------------- utilidades
 

@@ -10,6 +10,7 @@ OpenAI u Ollama (local). Se configura en el archivo .env.
 from __future__ import annotations
 
 import re
+import time
 from typing import Callable, Iterable
 
 from .config import ConfigLLM, cargar_config_llm
@@ -30,6 +31,8 @@ BASE DE CONOCIMIENTO:
 {conocimiento}"""
 
 MAX_TURNOS_HISTORIAL = 6
+REINTENTOS_CUOTA = 4      # reintentos si el proveedor responde 429 (límite por minuto)
+ESPERA_CUOTA_S = 20
 _EXCLUIR = ("lite", "tts", "live", "audio", "image", "embedding", "vision", "robotics",
             "transcribe", "omni", "translate", "aqa", "learnlm", "gemma", "thinking")
 
@@ -88,10 +91,16 @@ class MotorLLM:
         return max(estables, key=_clave_version) if estables else None
 
     def _crear(self, cliente, mensajes: list[dict]):
-        return cliente.chat.completions.create(
-            model=self.modelo, messages=mensajes,
-            temperature=self.config.temperatura, max_tokens=self.config.max_tokens,
-        )
+        for intento in range(REINTENTOS_CUOTA + 1):
+            try:
+                return cliente.chat.completions.create(
+                    model=self.modelo, messages=mensajes,
+                    temperature=self.config.temperatura, max_tokens=self.config.max_tokens,
+                )
+            except Exception as exc:
+                if getattr(exc, "status_code", None) != 429 or intento == REINTENTOS_CUOTA:
+                    raise
+                time.sleep(ESPERA_CUOTA_S)
 
     def responder(self, pregunta: str, historial: Iterable[dict] | None = None) -> str:
         cliente = self._obtener_cliente()
@@ -109,7 +118,10 @@ class MotorLLM:
                 respuesta = self._crear(cliente, mensajes)
         except Exception as exc:  # errores de red, cuota, modelo inexistente, etc.
             raise ErrorMotor(f"Error al consultar el LLM ({self.config.proveedor}, modelo {self.modelo}): {exc}") from exc
-        texto = (respuesta.choices[0].message.content or "").strip()
+        eleccion = respuesta.choices[0]
+        texto = (eleccion.message.content or "").strip()
         if not texto:
             raise ErrorMotor("El LLM devolvió una respuesta vacía.")
+        if getattr(eleccion, "finish_reason", None) == "length":
+            texto += " […respuesta cortada por el límite de longitud]"
         return texto
