@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot · Fauna nativa de Chile</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="cabecera">
+    <div>
+      <h1>Fauna nativa de Chile</h1>
+      <p class="subtitulo">Chatbot con lógica de primer orden (Prolog) y con un LLM</p>
+    </div>
+    <div class="estado" id="estado" aria-live="polite">Conectando…</div>
+  </header>
+
+  <main class="contenedor">
+    <nav class="modos" role="radiogroup" aria-label="Motor del chatbot">
+      <button class="modo activo" data-motor="prolog" role="radio" aria-checked="true">Prolog</button>
+      <button class="modo" data-motor="llm" role="radio" aria-checked="false">LLM</button>
+      <button class="modo" data-motor="ambos" role="radio" aria-checked="false">Comparar ambos</button>
+    </nav>
+
+    <section class="chat" id="chat" aria-live="polite"></section>
+
+    <div class="sugerencias" id="sugerencias"></div>
+
+    <form class="entrada" id="formulario" autocomplete="off">
+      <input id="pregunta" type="text" maxlength="500" placeholder="Escribe tu pregunta, por ejemplo: ¿Qué come el pudú?" required>
+      <button type="submit" id="enviar">Enviar</button>
+    </form>
+    <button class="limpiar" id="limpiar" type="button">Limpiar conversación</button>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

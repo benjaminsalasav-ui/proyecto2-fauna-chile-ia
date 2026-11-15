@@ -1,0 +1,123 @@
+[
+ {
+  "id": "R1",
+  "categoria": "Paráfrasis",
+  "pregunta": "¿Cuál es el ciervo más pequeño de Chile?",
+  "esperado": [
+   "pudu"
+  ],
+  "prohibido": []
+ },
+ {
+  "id": "R2",
+  "categoria": "Paráfrasis",
+  "pregunta": "¿Qué animal chileno es un marsupial?",
+  "esperado": [
+   "monito"
+  ],
+  "prohibido": []
+ },
+ {
+  "id": "R3",
+  "categoria": "Sí / no",
+  "pregunta": "¿Hay pumas en Torres del Paine?",
+  "esperado": [
+   [
+    "si,",
+    "se puede observar",
+    "se encuentra",
+    "habita"
+   ]
+  ],
+  "prohibido": [
+   "no tengo registrado"
+  ]
+ },
+ {
+  "id": "R4",
+  "categoria": "Paráfrasis",
+  "pregunta": "¿Qué tan grande es el cóndor?",
+  "esperado": [
+   [
+    "envergadura",
+    "3 m"
+   ]
+  ],
+  "prohibido": []
+ },
+ {
+  "id": "R5",
+  "categoria": "Inferencia sobre amenazas",
+  "pregunta": "¿La güiña ataca gallinas?",
+  "esperado": [
+   [
+    "aves de corral",
+    "gallina"
+   ]
+  ],
+  "prohibido": []
+ },
+ {
+  "id": "R6",
+  "categoria": "Listado con dos condiciones",
+  "pregunta": "¿Qué anfibios están amenazados?",
+  "esperado": [
+   "ranita de darwin",
+   "rana grande"
+  ],
+  "prohibido": []
+ },
+ {
+  "id": "R7",
+  "categoria": "Listado con dos condiciones",
+  "pregunta": "¿Existe algún animal que viva en ríos y esté en peligro?",
+  "esperado": [
+   "huillin"
+  ],
+  "prohibido": [
+   "chungungo"
+  ]
+ },
+ {
+  "id": "R8",
+  "categoria": "Plurales",
+  "pregunta": "¿Qué comen los pudúes y los huemules?",
+  "esperado": [
+   "pudu",
+   "huemul",
+   "hojas"
+  ],
+  "prohibido": []
+ },
+ {
+  "id": "R9",
+  "categoria": "Listado con dos condiciones",
+  "pregunta": "¿Qué especies viven tanto en el norte como en el sur?",
+  "esperado": [
+   "puma",
+   "culpeo",
+   "chungungo",
+   "condor",
+   "pinguino"
+  ],
+  "prohibido": [
+   "huemul"
+  ]
+ },
+ {
+  "id": "R10",
+  "categoria": "Paráfrasis",
+  "pregunta": "¿Qué ave no puede volar?",
+  "esperado": [
+   "nandu"
+  ],
+  "prohibido": [
+   "condor",
+   "flamenco",
+   "carpintero",
+   "choroy",
+   "chucao"
+  ],
+  "nota": "Según la base, solo el ñandú tiene registrado que no vuela."
+ }
+]

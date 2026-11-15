@@ -1,0 +1,764 @@
+{
+  "fecha": "2026-11-14 22:25",
+  "llm": {
+    "usado": false,
+    "proveedor": "gemini",
+    "modelo": "gemini-2.5-flash"
+  },
+  "preguntas": [
+    {
+      "id": 1,
+      "categoria": "Dato puntual",
+      "pregunta": "¿Cuál es el nombre científico del huemul?",
+      "esperado": [
+        "hippocamelus bisulcus"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El nombre científico del huemul es Hippocamelus bisulcus.",
+        "ms": 71,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 2,
+      "categoria": "Dato puntual",
+      "pregunta": "¿Qué come el pudú?",
+      "esperado": [
+        "herbivor",
+        "hojas"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El pudú tiene una dieta herbívora: se alimenta de hojas, brotes y frutos.",
+        "ms": 71,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 3,
+      "categoria": "Dato puntual",
+      "pregunta": "¿Dónde vive el chungungo?",
+      "esperado": [
+        [
+          "costa",
+          "mar"
+        ]
+      ],
+      "prohibido": [
+        "rios y lagos"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El chungungo vive en la costa marina, en la zona norte, zona centro, zona sur y zona austral.",
+        "ms": 72,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 4,
+      "categoria": "Dato puntual",
+      "pregunta": "¿Cuál es el estado de conservación del cóndor andino?",
+      "esperado": [
+        "vulnerable"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El cóndor andino tiene estado de conservación vulnerable (VU) según la Lista Roja de la UICN, por lo que es una especie amenazada.",
+        "ms": 65,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 5,
+      "categoria": "Sí / no",
+      "pregunta": "¿El zorro de Darwin es endémico de Chile?",
+      "esperado": [
+        "endemic"
+      ],
+      "prohibido": [
+        "no es endemic",
+        "no esta registrad"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Sí, el zorro de Darwin es una especie endémica de Chile: solo vive en este país.",
+        "ms": 64,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 6,
+      "categoria": "Paráfrasis",
+      "pregunta": "¿Cuál es el felino más pequeño de América?",
+      "esperado": [
+        "guina"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "No tengo información sobre eso en mi base de conocimiento, que trata solo de fauna nativa de Chile. Prueba con preguntas como: ¿Dónde vive el huillín? o ¿Qué animales están en peligro?",
+        "ms": 73,
+        "error": null,
+        "evaluacion": {
+          "estado": "incorrecta",
+          "cumplidos": 0,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 7,
+      "categoria": "Listado",
+      "pregunta": "¿Qué animales están en peligro?",
+      "esperado": [
+        "huemul",
+        "zorro de darwin",
+        "chinchilla",
+        "huillin",
+        "chungungo",
+        "ranita de darwin"
+      ],
+      "prohibido": [
+        "guina",
+        "condor",
+        "pudu"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que están en peligro (EN o CR): el huemul, el zorro de Darwin, la chinchilla, el huillín, el chungungo y la ranita de Darwin. Total: 6.",
+        "ms": 72,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 6,
+          "total": 6,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 8,
+      "categoria": "Listado con dos condiciones",
+      "pregunta": "¿Qué aves viven en el altiplano?",
+      "esperado": [
+        "flamenco",
+        "nandu"
+      ],
+      "prohibido": [
+        "pinguino",
+        "carpintero"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que son aves y habitan en el altiplano: el flamenco chileno y el ñandú. Total: 2.",
+        "ms": 74,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 9,
+      "categoria": "Inferencia (regla)",
+      "pregunta": "¿Quién se come al pudú?",
+      "esperado": [
+        "puma"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Según mi base de conocimiento, el pudú es presa del puma.",
+        "ms": 71,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 10,
+      "categoria": "Listado con dos condiciones",
+      "pregunta": "¿Qué mamíferos son endémicos de Chile?",
+      "esperado": [
+        "zorro de darwin",
+        "degu",
+        "cururo"
+      ],
+      "prohibido": [
+        "choroy",
+        "rana grande"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que son mamíferos y son endémicas de Chile: el zorro de Darwin, el degú y el cururo. Total: 3.",
+        "ms": 75,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 3,
+          "total": 3,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 11,
+      "categoria": "Descripción general",
+      "pregunta": "Háblame del monito del monte",
+      "esperado": [
+        "dromiciops",
+        "marsupial"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El monito del monte (Dromiciops gliroides) es un mamífero de dieta omnívora. Vive en el bosque templado (zona sur). Estado de conservación (UICN): casi amenazada (NT). Dato curioso: es un marsupial, el único sobreviviente del orden Microbiotheria, e hiberna en invierno.",
+        "ms": 71,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 12,
+      "categoria": "Inferencia (regla)",
+      "pregunta": "¿El puma y el guanaco comparten hábitat?",
+      "esperado": [
+        "estepa"
+      ],
+      "prohibido": [
+        "no comparten"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Sí, el puma y el guanaco comparten hábitat: ambos viven en la cordillera de los Andes y la estepa patagónica. Coinciden en la zona norte, zona centro y zona austral.",
+        "ms": 72,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 13,
+      "categoria": "Listado con dos condiciones",
+      "pregunta": "¿Qué animales del sur de Chile están amenazados?",
+      "esperado": [
+        "huemul",
+        "zorro de darwin",
+        "guina",
+        "huillin",
+        "chungungo",
+        "condor",
+        "pinguino",
+        "ranita de darwin",
+        "rana grande"
+      ],
+      "prohibido": [
+        "pudu",
+        "monito",
+        "carpintero",
+        "chucao"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que viven en la zona sur y están amenazadas (VU, EN o CR): el huemul, el zorro de Darwin, la güiña, el huillín, el chungungo, el cóndor andino, el pingüino de Humboldt, la ranita de Darwin y la rana grande chilena. Total: 9.",
+        "ms": 76,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 9,
+          "total": 9,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 14,
+      "categoria": "Listado",
+      "pregunta": "¿Cuáles son los animales del escudo de Chile?",
+      "esperado": [
+        "condor",
+        "huemul"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que son emblemas del escudo nacional: el huemul y el cóndor andino. Total: 2.",
+        "ms": 76,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 15,
+      "categoria": "Listado",
+      "pregunta": "¿Qué animales comen peces?",
+      "esperado": [
+        "huillin",
+        "chungungo",
+        "pinguino",
+        "rana grande"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que comen peces: el huillín, el chungungo, el pingüino de Humboldt y la rana grande chilena. Total: 4.",
+        "ms": 68,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 4,
+          "total": 4,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 16,
+      "categoria": "Paráfrasis",
+      "pregunta": "Si voy a Chiloé, ¿qué animal endémico podría ver?",
+      "esperado": [
+        "zorro de darwin"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que se encuentran en Chiloé y son endémicas de Chile: el zorro de Darwin. Total: 1.",
+        "ms": 90,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 17,
+      "categoria": "Error de tipeo",
+      "pregunta": "que come el guemul",
+      "esperado": [
+        "hojas"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El huemul tiene una dieta herbívora: se alimenta de hojas, brotes y pasto.",
+        "ms": 66,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 18,
+      "categoria": "Explicación (por qué)",
+      "pregunta": "¿Por qué el huemul está en peligro?",
+      "esperado": [
+        "caza",
+        "perros"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El huemul tiene estado de conservación en peligro (EN) según la Lista Roja de la UICN, por lo que es una especie amenazada. Las principales amenazas para el huemul son: pérdida y fragmentación de su hábitat, caza furtiva, ataques de perros y enfermedades transmitidas por el ganado.",
+        "ms": 67,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 19,
+      "categoria": "Fuera del dominio",
+      "pregunta": "¿Cuál es la capital de Francia?",
+      "esperado": [
+        [
+          "no tengo",
+          "solo puedo",
+          "solo respondo",
+          "no puedo",
+          "fauna nativa"
+        ]
+      ],
+      "prohibido": [
+        "paris"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "No tengo información sobre eso en mi base de conocimiento, que trata solo de fauna nativa de Chile. Prueba con preguntas como: ¿Dónde vive el huillín? o ¿Qué animales están en peligro?",
+        "ms": 71,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": 20,
+      "categoria": "Comparación",
+      "pregunta": "¿Qué diferencia hay entre el huillín y el chungungo?",
+      "esperado": [
+        [
+          "rio",
+          "lago",
+          "agua dulce"
+        ],
+        [
+          "costa",
+          "mar"
+        ]
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Comparación entre el huillín y el chungungo. El huillín es un mamífero de dieta carnívora, vive en ríos y lagos y su estado es en peligro (EN). El chungungo es un mamífero de dieta carnívora, vive en la costa marina y su estado es en peligro (EN). En común: ambos son mamíferos, ambos tienen dieta carnívora y tienen el mismo estado de conservación (en peligro (EN)). Diferencias: no comparten ecosistema.",
+        "ms": 72,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    }
+  ],
+  "resumen": {
+    "prolog": {
+      "correctas": 19,
+      "parciales": 0,
+      "incorrectas": 1,
+      "sin_respuesta": 0,
+      "puntaje": 19.0,
+      "total": 20,
+      "tiempo_promedio_ms": 72
+    }
+  },
+  "robustez": [
+    {
+      "id": "R1",
+      "categoria": "Paráfrasis",
+      "pregunta": "¿Cuál es el ciervo más pequeño de Chile?",
+      "esperado": [
+        "pudu"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "No tengo información sobre eso en mi base de conocimiento, que trata solo de fauna nativa de Chile. Prueba con preguntas como: ¿Dónde vive el huillín? o ¿Qué animales están en peligro?",
+        "ms": 67,
+        "error": null,
+        "evaluacion": {
+          "estado": "incorrecta",
+          "cumplidos": 0,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R2",
+      "categoria": "Paráfrasis",
+      "pregunta": "¿Qué animal chileno es un marsupial?",
+      "esperado": [
+        "monito"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "No tengo información sobre eso en mi base de conocimiento, que trata solo de fauna nativa de Chile. Prueba con preguntas como: ¿Dónde vive el huillín? o ¿Qué animales están en peligro?",
+        "ms": 67,
+        "error": null,
+        "evaluacion": {
+          "estado": "incorrecta",
+          "cumplidos": 0,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R3",
+      "categoria": "Sí / no",
+      "pregunta": "¿Hay pumas en Torres del Paine?",
+      "esperado": [
+        [
+          "si,",
+          "se puede observar",
+          "se encuentra",
+          "habita"
+        ]
+      ],
+      "prohibido": [
+        "no tengo registrado"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Sí, el puma se puede observar en Torres del Paine.",
+        "ms": 69,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R4",
+      "categoria": "Paráfrasis",
+      "pregunta": "¿Qué tan grande es el cóndor?",
+      "esperado": [
+        [
+          "envergadura",
+          "3 m"
+        ]
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El cóndor andino (Vultur gryphus) es un ave de dieta carroñera. Vive en la cordillera de los Andes y la costa marina (zona norte, zona centro, zona sur y zona austral). Estado de conservación (UICN): vulnerable (VU). Dato curioso: es una de las aves voladoras más grandes del mundo, con unos 3 m de envergadura.",
+        "ms": 70,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R5",
+      "categoria": "Inferencia sobre amenazas",
+      "pregunta": "¿La güiña ataca gallinas?",
+      "esperado": [
+        [
+          "aves de corral",
+          "gallina"
+        ]
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "La güiña (Leopardus guigna) es un mamífero de dieta carnívora. Vive en el bosque templado y el matorral de la zona central (zona centro, zona sur y zona austral). Estado de conservación (UICN): vulnerable (VU). Dato curioso: es el felino más pequeño de América.",
+        "ms": 63,
+        "error": null,
+        "evaluacion": {
+          "estado": "incorrecta",
+          "cumplidos": 0,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R6",
+      "categoria": "Listado con dos condiciones",
+      "pregunta": "¿Qué anfibios están amenazados?",
+      "esperado": [
+        "ranita de darwin",
+        "rana grande"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que son anfibios y están amenazadas (VU, EN o CR): la ranita de Darwin y la rana grande chilena. Total: 2.",
+        "ms": 63,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 2,
+          "total": 2,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R7",
+      "categoria": "Listado con dos condiciones",
+      "pregunta": "¿Existe algún animal que viva en ríos y esté en peligro?",
+      "esperado": [
+        "huillin"
+      ],
+      "prohibido": [
+        "chungungo"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que habitan en ríos y lagos y están en peligro (EN o CR): el huillín. Total: 1.",
+        "ms": 64,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R8",
+      "categoria": "Plurales",
+      "pregunta": "¿Qué comen los pudúes y los huemules?",
+      "esperado": [
+        "pudu",
+        "huemul",
+        "hojas"
+      ],
+      "prohibido": [],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "El pudú tiene una dieta herbívora: se alimenta de hojas, brotes y frutos. El huemul tiene una dieta herbívora: se alimenta de hojas, brotes y pasto.",
+        "ms": 67,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 3,
+          "total": 3,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R9",
+      "categoria": "Listado con dos condiciones",
+      "pregunta": "¿Qué especies viven tanto en el norte como en el sur?",
+      "esperado": [
+        "puma",
+        "culpeo",
+        "chungungo",
+        "condor",
+        "pinguino"
+      ],
+      "prohibido": [
+        "huemul"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que viven en la zona norte y viven en la zona sur: el puma, el zorro culpeo, el chungungo, el cóndor andino y el pingüino de Humboldt. Total: 5.",
+        "ms": 68,
+        "error": null,
+        "evaluacion": {
+          "estado": "correcta",
+          "cumplidos": 5,
+          "total": 5,
+          "prohibidos": []
+        }
+      }
+    },
+    {
+      "id": "R10",
+      "categoria": "Paráfrasis",
+      "pregunta": "¿Qué ave no puede volar?",
+      "esperado": [
+        "nandu"
+      ],
+      "prohibido": [
+        "condor",
+        "flamenco",
+        "carpintero",
+        "choroy",
+        "chucao"
+      ],
+      "prolog": {
+        "motor": "prolog",
+        "texto": "Especies que son aves: el cóndor andino, el pingüino de Humboldt, el flamenco chileno, el carpintero negro, el choroy, el ñandú y el chucao. Total: 7.",
+        "ms": 63,
+        "error": null,
+        "evaluacion": {
+          "estado": "parcial",
+          "cumplidos": 1,
+          "total": 1,
+          "prohibidos": [
+            "condor",
+            "flamenco",
+            "carpintero",
+            "choroy",
+            "chucao"
+          ]
+        }
+      }
+    }
+  ],
+  "resumen_robustez": {
+    "prolog": {
+      "correctas": 6,
+      "parciales": 1,
+      "incorrectas": 3,
+      "sin_respuesta": 0,
+      "puntaje": 6.5,
+      "total": 10,
+      "tiempo_promedio_ms": 66
+    }
+  }
+}
